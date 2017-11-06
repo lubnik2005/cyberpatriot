@@ -1,6 +1,4 @@
-import os
-import sys
-import subprocess
+import os, sys, subprocess, pwd, grp
 mainPrint='''
 Welcome to the CyberPatriot Script
 
@@ -22,28 +20,66 @@ def main():
 		main()
 	
 def mainUsers():
-	usersInputted = []
-	usersComputer = subprocess.Popen(["cut -d: -f1 /etc/passwd"], shell=True, stdout=subprocess.PIPE).stdout
-	usersComputer = usersComputer.read().splitlines()
-	#Though bitwise is better for comparing, we will use utf-8 instead
-	for x in usersComputer:
-		x = x.decode()
-	for x in usersComputer:
-		pass
-		#x.remove(2)
-	print(usersComputer)
-	print('Welcome to the user section! Please input all users')
-	response = input('Please select the amount of users you have: ')
-	for x in range(0,int(response)):
-		user = input('Username of User: ')
-		usersInputted.append(user)
-	print(usersInputted)
+	usernameInput = ['root','bin','daemon','adm','lp','sync','shutdown','halt','mail','operator','games','ftp','nobody','systemd-coredump','systemd-timesync','systemd-network','systemd-resolve','dbus','tss','apache','mongodb','memcached','redis','mysql','sphinx',]
+	print('Users Inputed:')
+	if len(usernameInput) == 0:
+		print('No Users Inputed')
+	else:
+		print(usernameInput)
+	#Get all user data
+	# Refer to https://docs.python.org/2/library/pwd.html
+	all_user_data = pwd.getpwall()
 	
-	for x in usersInputted:
-		for y in usersComputer:
-			if x == y:
-				print 
+	#Put the Current users on the computer into list computerUsers
+	computerUsers = []
+	for p in pwd.getpwall()
+		computerUsers.append(p[0])
 	
+	#Get user input
+	QuantityUsers = input('How many users do you have?')
+	for x in range(0,QuantityUsers):
+		usernameInputTemp = input('Username of User: '+ str(x+1))
+		usernameInput.append(usernameInputTemp)
+	
+	#### FINDING MISSMATCHING USRES and putting them into usersMismatch ###
+	usersMismatch = []
+	list3 = computerUsers + usernameInput
+	for i in range(0, len(list3)):
+		if ((list3[i] not in computerUsers) or (list3[i] not in usernameInput)) and (list3[i] not in usersMismatch):
+			usersMismatch[len(usersMismatch):] = [list3[i]]
+			print('Mismatch: ' + str(list3[i]))
+	return ("Mismatched Users: ")
+	print(usersMismatch)
+	
+	#### FINDING Anauthorized USERS ########
+	unauthUsers = []
+	print('Searching for Unauthorized Users')
+	for x in usersMismatch:
+		if x not in usernameInput:
+			print('Unauthorized User: ' + x)
+			unauthUsers.append(x)
+	print('The Following Users are Unauthorized: ')
+	print(unauthUsers)
+	for x in unauthUsers:
+		response = input('Would you like to delete this users:'+x+'? [1/0] ')
+		if str(response) = str(1):
+			os.system('sudo deluser '+x)
+	###FINDING Missing USRERS #####
+	missingUsers = []
+	print('Searching for Missing Users')
+	for x in usersMismatch:
+		if x not in computerUsers:
+			print('Missing User: ' + x)
+			missingUsers.append(x)
+	print('The Following Users are Missing: ')
+	print(missingUsers)
+	for x in missingUsers:
+		response = input('Would you like to Create these users?:? [1/0] ')
+		if str(response) = str(1):
+			for x in missingUsers:
+				os.system('sudo adduser '+x)
+		
+
 def programs():
 	badPrograms = ['apache2','nmap','samba','wireshark']
 	print('This will check for bad programs:')
@@ -53,7 +89,7 @@ def programs():
 		if os.system('dpkg -l |grep '+x):
 			response = input(x+' is installed. Purge? [1/0]: ')
 			i += 1
-			if response == 1:
+			if str(response) == str(1):
 				os.system('sudo apt-get purge '+x)
 	if i == 0:
 		input('No bad programs installed')
