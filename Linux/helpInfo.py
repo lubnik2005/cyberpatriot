@@ -1,6 +1,6 @@
 def helpInfo():
 
-	info = {'Users':'''
+	info = [['Users','''
 1. Users
 		1. Run Users
 		2. First Section will show default users on Ubuntu
@@ -14,19 +14,15 @@ def helpInfo():
 		8. Delete if Neccissary - 1 is yes - 0 is no
 		9. Now the progam will look for missing users 
 		10. If missing users exist, it will ask if you want to make one.
-	''',
-	'Bad Programs':'''
+	'''],['Bad Programs','''
 	1. The program will first show the packages that it is looking for
 	2. The progam will now search for those packages
 	3. The program will ask you if you want to delete the package
-	'''}
+	''']]
 	
 	
 	print('This is the help Desk, you should get answers here.')
-	for x in helpInfo:
-		print(x[0])
-	response = input('Please select one of the following...')
-	try:
-		print(info[int(response)])
-	except:
-		pass
+	for item in range(0,len(info)):
+		print(str(item) + ' : ' + str(info[item][0]))
+	response = input('Please select one of the following: ')
+	input(info[int(response)][1])
