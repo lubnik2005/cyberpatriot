@@ -21,12 +21,11 @@ Please select on of the following:
 
 1. Check for Users
 2. Check for bad Programs
-<<<<<<< HEAD:Linux/main.py
 3. Check for Unauth Media Files (This takes forever...)
 9. Help
 =======
-3. Exit
->>>>>>> master:main.py
+10. Exit
+
 
 '''
 
@@ -42,15 +41,13 @@ def main():
 	if str(response) == str(2):
 		programs()
 		main()
-	if str(response) == str(3):
-<<<<<<< HEAD:Linux/main.py
+	if str(response) == str(9):
 		helpInfo()
 		main()
-=======
+	if str(response) == str(10):
 		os.system('printf "\033c"')
 		print(bcolors.FAIL + 'Thanks for using this AWESOME SCRIPT!!' + bcolors.ENDC)
 		quit()
->>>>>>> master:main.py
 	
 
 
