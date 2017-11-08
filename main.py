@@ -38,7 +38,7 @@ def main():
 		main()
 	if str(response) == str(3):
 		os.system('printf "\033c"')
-		print(bcolors.FAIL + 'Thanks for using this AWESOME SCRIPT!!' + bcolors)
+		print(bcolors.FAIL + 'Thanks for using this AWESOME SCRIPT!!' + bcolors.ENDC)
 		quit()
 	
 
