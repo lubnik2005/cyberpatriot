@@ -19,15 +19,14 @@ def helpInfo():
 	1. The program will first show the packages that it is looking for
 	2. The progam will now search for those packages
 	3. The program will ask you if you want to delete the package
-	'''
+	'''}
 	
-	intro = 'This is the help Desk, you should get answers here.'
 	
-	print(intro)
+	print('This is the help Desk, you should get answers here.')
 	for x in helpInfo:
 		print(x[0])
 	response = input('Please select one of the following...')
 	try:
-		print(info[int(response]))
+		print(info[int(response)])
 	except:
 		pass
