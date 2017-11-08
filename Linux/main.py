@@ -21,8 +21,12 @@ Please select on of the following:
 
 1. Check for Users
 2. Check for bad Programs
+<<<<<<< HEAD:Linux/main.py
 3. Check for Unauth Media Files (This takes forever...)
 9. Help
+=======
+3. Exit
+>>>>>>> master:main.py
 
 '''
 
@@ -39,8 +43,14 @@ def main():
 		programs()
 		main()
 	if str(response) == str(3):
+<<<<<<< HEAD:Linux/main.py
 		helpInfo()
 		main()
+=======
+		os.system('printf "\033c"')
+		print(bcolors.FAIL + 'Thanks for using this AWESOME SCRIPT!!' + bcolors.ENDC)
+		quit()
+>>>>>>> master:main.py
 	
 
 
@@ -113,7 +123,7 @@ def mainUsers():
 		
 
 def programs():
-	badPrograms = ['apache2','nmap','samba','wireshark']
+	badPrograms = ['apache2','nmap','samba','wireshark','wireshark-common','hydra']
 	print('This will check for the following programs:')
 	print(badPrograms)
 	print('Searching...')
