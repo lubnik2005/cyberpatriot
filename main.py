@@ -20,6 +20,7 @@ Please select on of the following:
 
 1. Check for Users
 2. Check for bad Programs
+3. Exit
 
 '''
 
@@ -35,6 +36,10 @@ def main():
 	if str(response) == str(2):
 		programs()
 		main()
+	if str(response) == str(3):
+		os.system('printf "\033c"')
+		print(bcolors.FAIL + 'Thanks for using this AWESOME SCRIPT!!' + bcolors)
+		quit()
 	
 
 
@@ -107,7 +112,7 @@ def mainUsers():
 		
 
 def programs():
-	badPrograms = ['apache2','nmap','samba','wireshark']
+	badPrograms = ['apache2','nmap','samba','wireshark','wireshark-common','hydra']
 	print('This will check for the following programs:')
 	print(badPrograms)
 	print('Searching...')
