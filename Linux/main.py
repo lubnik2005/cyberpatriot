@@ -1,7 +1,7 @@
 #!/usr/bin/env python3.5
 
 
-import os, sys, subprocess, pwd, grp, apt
+import os, sys, subprocess, pwd, grp, apt, glob
 from helpInfo import helpInfo
 
 class bcolors:
@@ -36,12 +36,19 @@ def main():
 	print(mainPrint)
 	response = input('Selection: ')
 	if str(response) == str(1):
+		os.system('printf "\033c"')
 		mainUsers()
 		main()
 	if str(response) == str(2):
+		os.system('printf "\033c"')
 		programs()
 		main()
+	if str(response) == str(3):
+		os.system('printf "\033c"')
+		mediaFiles()
+		main()
 	if str(response) == str(9):
+		os.system('printf "\033c"')
 		helpInfo()
 		main()
 	if str(response) == str(10):
@@ -143,28 +150,33 @@ def mediaFiles():
 		allMedia = []
 		unAuthMedia = []
 		response = None
-		response = input('Where do you want to search (root is default)?: ')
+		response = input('Where do you want to search (home is default)?: ')
 		if response != None:
-			input("Well that's too bad, it hasn't been implemented yet, will search from root!")
+			input("Well that's too bad, it hasn't been implemented yet, will search from home!")
 		#Searching for All Media
 		#Refer to: https://stackoverflow.com/questions/2186525/use-a-glob-to-find-files-recursively-in-python
 		print('Searching for Media with the following extentions:')
 		print(typesOfMedia)
-		for filename in glob.iglob('/**/*.jpg',recursive=True):
-			print('Media File: '+filename)
-			allMedia.append(filename)
+		for ext in typesOfMedia:
+			for filename in glob.iglob('/home/**/*'+ext, recursive=True):
+				print(bcolors.FAIL + 'Media File: ' +bcolors.ENDC +filename)
+				allMedia.append(filename)
+		
 		#Searching for UnauthMedia
 		list3 = allMedia + defaultMedia
 		for i in range(0, len(list3)):
 			if ((list3[i] not in allMedia) or (list3[i] not in defaultMedia)) and (list3[i] not in unAuthMedia):
 				unAuthMedia[len(unAuthMedia):] = [list3[i]]
 				print(bcolors.FAIL + 'Unauthorized File: ' + bcolors.ENDC + str(list3[i]))
-				os.system('sudo mv '+str(list3[i])+'./store/media')
-		input('Finished searching for UnauthFiles, and copied all files to ./store/media')
-		response = input('Delete all Unauth Files?[1/0]')
-		if str(response) == str(1):
-			for file in unAuthMedia:
-				print('Deleting: '+file)
-				os.system('sudo rm -f '+file)
+				os.system('sudo mv '+str(list3[i])+' ./store/media')
+		if len(unAuthMedia) != 0:
+			input('Finished searching for UnauthFiles, and copied all files to ./store/media')
+			response = input('Delete all Unauth Files?[1/0] ')
+			if str(response) == str(1):
+				for file in unAuthMedia:
+					print('Deleting: '+file)
+					os.system('sudo rm -f '+file)
+		else:
+			print('No Unauthorized files found!')
 		input('Finished with the file section!')
 main()
