@@ -2,6 +2,7 @@
 
 
 import os, sys, subprocess, pwd, grp, apt
+from helpInfo import helpInfo
 
 class bcolors:
     HEADER = '\033[95m'
@@ -21,6 +22,7 @@ Please select on of the following:
 1. Check for Users
 2. Check for bad Programs
 3. Check for Unauth Media Files (This takes forever...)
+9. Help
 
 '''
 
@@ -35,6 +37,9 @@ def main():
 		main()
 	if str(response) == str(2):
 		programs()
+		main()
+	if str(response) == str(3):
+		helpInfo()
 		main()
 	
 
