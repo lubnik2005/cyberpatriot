@@ -92,7 +92,7 @@ def mainUsers():
 	print("Mismatched Users: ")
 	print(usersMismatch)
 	
-	#### FINDING Anauthorized USERS ########
+	#### FINDING Unauthorized USERS ########
 	unauthUsers = []
 	input('Searching for Unauthorized Users')
 	for x in usersMismatch:
@@ -104,13 +104,19 @@ def mainUsers():
 	else:	
 		print('The Following Users are Unauthorized: ')
 		print(unauthUsers)
-	for x in unauthUsers:
-		response = input('Would you like to delete this users: '+x+'? [1/0] ')
-		if str(response) == str(1):
-			os.system('sudo deluser '+x)
+	response = input('Do you want the script to do this automatically?[1/0] ')
+	if str(response) == str(1):
+		for x in unauthUsers:
+			os.system('sudo mv /home/' + x +' ./store/home/unAuth')
+			os.system('sudo deluser ' + x)
+	else:	
+		for x in unauthUsers:
+			response = input('Would you like to delete this users: '+x+'? [1/0] ')
+			if str(response) == str(1):
+				os.system('sudo deluser ' + x)
 	###FINDING Missing USRERS #####
 	missingUsers = []
-	print('Searching for Missing Users')
+	input('Searching for Missing Users')
 	for x in usersMismatch:
 		if x not in computerUsers:
 			print(bcolors.FAIL + 'Missing User: ' + bcolors.ENDC + x)
@@ -120,10 +126,18 @@ def mainUsers():
 	else:	
 		print('The Following Users are Missing: ')
 		print(missingUsers)
-	for x in missingUsers:
-		response = input('Would you like to create '+x+'?: [1/0] ')
-		if str(response) == str(1):
+	response = input('Want the script to create all of the users at once?[1/0] ')
+	if str(response) == str(1):
+		response = input('What password should they all have?: ')
+		for x in missingUsers:
+			os.system('sudo useradd '+ x)
+			os.system('echo -e "' + response + '" | sudo passwd -q ' + x)
+	else:
+		for x in missingUsers:
+			response = input('Would you like to create '+x+'?: [1/0] ')
+			if str(response) == str(1):
 				os.system('sudo adduser '+x)
+	input('Great! All finished with Users')
 		
 
 def programs():
