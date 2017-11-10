@@ -22,6 +22,9 @@ Please select on of the following:
 1. Check for Users
 2. Check for bad Programs
 3. Check for Unauth Media Files (This takes forever...)
+4. Ports
+5. Firewall
+6. Programs and Updates
 9. Help
 =======
 10. Exit
@@ -47,6 +50,17 @@ def main():
 		os.system('printf "\033c"')
 		mediaFiles()
 		main()
+	if str(response) == str(4):
+		os.system('printf "\033c"')
+		mainPort()
+		main()
+	if str(response) == str(5):
+		os.system('printf "\033c"')
+		firewall()
+		main()
+	if str(response) == str(6):
+		os.system('printf "\033c"')
+		installPrograms()
 	if str(response) == str(9):
 		os.system('printf "\033c"')
 		helpInfo()
@@ -56,7 +70,7 @@ def main():
 		print(bcolors.FAIL + 'Thanks for using this AWESOME SCRIPT!!' + bcolors.ENDC)
 		quit()
 	
-
+	main()
 
 def mainUsers():
 	usernameInput = ['root', 'daemon', 'bin', 'sys', 'sync', 'games', 'man', 'lp', 'mail', 'news', 'uucp', 'proxy', 'www-data', 'backup', 'list', 'irc', 'gnats', 'nobody', 'systemd-timesync', 'systemd-network', 'systemd-resolve', 'systemd-bus-proxy', 'syslog', '_apt', 'messagebus', 'uuidd', 'lightdm', 'whoopsie', 'avahi-autoipd', 'avahi', 'dnsmasq', 'colord', 'speech-dispatcher', 'hplip', 'kernoops', 'pulse', 'rtkit', 'saned', 'usbmux',]
@@ -159,7 +173,7 @@ def programs():
 	cache.close()
 	
 def mediaFiles():
-		typesOfMedia = ['*.jpg','*.png','*.mp3','*.jpeg']
+		typesOfMedia = ['jpg','png','mp3','jpeg','mov','mp4','avi','mpg','mpeg','flac','m4a','flv','ogg','gif']
 		defaultMedia = []
 		allMedia = []
 		unAuthMedia = []
@@ -172,7 +186,7 @@ def mediaFiles():
 		print('Searching for Media with the following extentions:')
 		print(typesOfMedia)
 		for ext in typesOfMedia:
-			for filename in glob.iglob('/home/**/*'+ext, recursive=True):
+			for filename in glob.iglob('/home/**/*.'+ext, recursive=True):
 				print(bcolors.FAIL + 'Media File: ' +bcolors.ENDC +filename)
 				allMedia.append(filename)
 		
@@ -193,4 +207,32 @@ def mediaFiles():
 		else:
 			print('No Unauthorized files found!')
 		input('Finished with the file section!')
+def mainPort():
+	ports = ['23','2049','6000:6000','7100','515','111']
+	for port in ports:
+		dropa = 'iptables -A INPUT -p tcp -s 0/0 -d 0/0 --dport ' + port+ ' -j DROP'
+		dropb = 'iptables -A INPUT -p udp -s 0/0 -d 0/0 --dport ' + port+ ' -j DROP'
+		os.system(dropa)
+		os.system(dropb)
+		print(dropa + '\n' + dropb)
+	os.system('iptables -A INPUT -p all -s localhost -i eth0 -j DROP')
+	input('Finished Ports')
+
+def firewall():
+	denyStuffs = ['23','2049','515','111']
+	os.system('ufw enable')
+	for denyStuff in denyStuffs:
+		os.system('ufw deny ' + denyStuff)
+	os.system('lsof  -i -n -P; netstat -tulpn')
+	input('Finished Firewall')
+
+def installPrograms():
+	os.system('sudo apt-get --assume-yes upgrade ')
+	os.system('sudo apt-get --assume-yes upgrade')
+	os.system('sudo apt-get -V -y --assume-yes install --reinstall coreutils')
+	os.system('sudo apt-get apt-get -V -y --assume-yes install firefox hardinfo chkrootkit iptables portsentry lynis ufw gufw sysv-rc-conf nessus clamav')
+
+	programs = ['synaptic','hardinfo','chkrootkit','lynis','freshclam','clamscan']
+	input('Finished Programs')
 main()
+
